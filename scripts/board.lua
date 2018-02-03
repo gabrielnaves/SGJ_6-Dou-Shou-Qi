@@ -2,7 +2,7 @@ local board = {}
 
 function board:init()
     self.mt = {}
-    for i=1, measure.square_heigth do
+    for i=1, measure.square_height do
         self.mt[i] = {}
         for j=1, measure.square_width do
             self.mt[i][j] = 0
@@ -31,7 +31,7 @@ function board:init()
 end
 
 function board:draw()
-    for i=1, measure.square_heigth do
+    for i=1, measure.square_height do
         for j=1, measure.square_width do
             if self.mt[i][j] ~= 0 then
                 love.graphics.draw(pieces.img, pieces.frames[self.mt[i][j]], self.drawX(j), self.drawY(i))
@@ -52,6 +52,22 @@ function board.drawY(i)
     return start_y + i * measure.piece_size + i*2
 end
 
+function board:matrixIndexFromPosition(x, y)
+    if board.isPointInBoard(x, y) then
+        x = x - (measure.board_x + 4)
+        y = y - (measure.board_y + 4)
+        return {
+            i = math.ceil(y / ((measure.board_height - 8) / measure.square_height)),
+            j = math.ceil(x / ((measure.board_width - 8) / measure.square_width))
+        }
+    end
+    return nil
+end
+
+function board.isPointInBoard(x, y)
+    return x > measure.board_x+4 and x < measure.board_x+measure.board_width-4 and
+           y > measure.board_y+4 and y < measure.board_y+measure.board_height-4
+end
 
 board:init()
 return board

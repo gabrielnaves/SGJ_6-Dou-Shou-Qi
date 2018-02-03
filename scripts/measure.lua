@@ -11,7 +11,7 @@ measure.piece_size = 64
 measure.piece_amount = 16
 
 measure.square_width = 9
-measure.square_heigth = 9
+measure.square_height = 7
 
 -- Calculated values
 measure.board_x = (measure.screen_width - measure.board_width) / 2

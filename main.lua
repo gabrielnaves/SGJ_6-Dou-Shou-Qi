@@ -1,3 +1,4 @@
+require("scripts.debug")
 require("scripts.measure")
 require("scripts.still_image")
 require("scripts.input")
@@ -7,6 +8,8 @@ function love.load(arg)
     board_img = still_image.new('board.png', measure.board_x, measure.board_y)
     pieces = require("scripts.game_pieces")
     board = require("scripts.board")
+
+    white_turn = true
 end
 
 function love.update(dt)
