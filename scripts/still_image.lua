@@ -6,7 +6,7 @@ function still_image.new(img_name, xPos, yPos)
         x = xPos,
         y = yPos,
 
-        draw = function(self, dt)
+        draw = function(self)
             love.graphics.draw(self.img, self.x, self.y)
         end
     }
