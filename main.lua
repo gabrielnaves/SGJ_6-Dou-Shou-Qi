@@ -1,5 +1,6 @@
 require("scripts.measure")
 require("scripts.still_image")
+require("scripts.game_pieces")
 
 function love.load(arg)
     background = still_image.new('background.png', 0, 0)
