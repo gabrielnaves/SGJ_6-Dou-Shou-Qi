@@ -1,5 +1,6 @@
 require("scripts.measure")
 require("scripts.still_image")
+require("scripts.input")
 
 function love.load(arg)
     background = still_image.new('background.png')
@@ -9,6 +10,7 @@ function love.load(arg)
 end
 
 function love.update(dt)
+    input:update()
 end
 
 function love.draw(dt)
