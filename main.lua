@@ -9,13 +9,13 @@ function love.load(arg)
     pieces = require("scripts.game_pieces")
     board = require("scripts.board")
     highlighting = require("scripts.highlighting")
-
-    white_turn = true
+    gamemanager = require("scripts.gamemanager")
 end
 
 function love.update(dt)
     input:update()
     highlighting:update()
+    gamemanager:update()
 end
 
 function love.draw(dt)
