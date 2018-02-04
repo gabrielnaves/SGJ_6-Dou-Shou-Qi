@@ -41,6 +41,7 @@ end
 function gamemanager:updateSelected()
     highlighting.mt[self.selection.i][self.selection.j] = highlighting.selected_img
     self:checkMovementDirections()
+    self:checkAttackDirections()
     self:checkInput()
 end
 
@@ -53,14 +54,25 @@ end
 
 function gamemanager:checkSquareForMovement(i, j, dir)
     if i > 0 and i < measure.square_height+1 and j > 0 and j < measure.square_width+1 then
-        if board.mt[i][j] == 0 then
-            if board_floor.mt[i][j] == 'floor' or board_floor.mt[i][j] == 'white trap' or
-            board_floor.mt[i][j] == 'black trap' then
-                highlighting.mt[i][j] = highlighting.move_img
-            end
-            if board_floor.mt[i][j] == 'water' then
-                self:checkMovementOnWater(i, j, dir)
-            end
+        local floor = board_floor.mt[i][j]
+        local animal = board.mt[i][j]
+
+        if floor == 'floor' then
+            highlighting.mt[i][j] = highlighting.move_img
+        elseif floor == 'water' then
+            self:checkMovementOnWater(i, j, dir)
+        elseif self.white_turn and floor == 'white trap' then
+            highlighting.mt[i][j] = highlighting.move_img
+        elseif self.white_turn and floor == 'black trap' then
+            highlighting.mt[i][j] = highlighting.move_img
+        elseif not self.white_turn and floor == 'white trap' then
+            highlighting.mt[i][j] = highlighting.move_img
+        elseif not self.white_turn and floor == 'black trap' then
+            highlighting.mt[i][j] = highlighting.move_img
+        elseif self.white_turn and floor == 'black den' then
+            highlighting.mt[i][j] = highlighting.move_img
+        elseif not self.white_turn and floor == 'white den' then
+            highlighting.mt[i][j] = highlighting.move_img
         end
     end
 end
@@ -71,20 +83,46 @@ function gamemanager:checkMovementOnWater(i, j, dir)
     elseif self.selection_strength == 6 or self.selection_strength == 7 then
         if board.mt[i][j] == 0 then
             if dir == 'up' then
-                if board.mt[i-2][j] == 0 and board.mt[i-1][j] == 0 then
+                if board.mt[i-1][j] == 0 then
                     highlighting.mt[i-2][j] = highlighting.move_img
                 end
             elseif dir == 'down' then
-                if board.mt[i+2][j] == 0 and board.mt[i+1][j] == 0 then
+                if board.mt[i+1][j] == 0 then
                     highlighting.mt[i+2][j] = highlighting.move_img
                 end
             elseif dir == 'left' then
-                if board.mt[i][j-3] == 0 and board.mt[i][j-2] == 0 and board.mt[i][j-1] == 0 then
+                if board.mt[i][j-2] == 0 and board.mt[i][j-1] == 0 then
                     highlighting.mt[i][j-3] = highlighting.move_img
                 end
             elseif dir == 'right' then
-                if board.mt[i][j+3] == 0 and board.mt[i][j+2] == 0 and board.mt[i][j+1] == 0 then
+                if board.mt[i][j+2] == 0 and board.mt[i][j+1] == 0 then
                     highlighting.mt[i][j+3] = highlighting.move_img
+                end
+            end
+        end
+    end
+end
+
+function gamemanager:checkAttackDirections()
+    for i=1, measure.square_height do
+        for j=1, measure.square_width do
+            if highlighting.mt[i][j] == highlighting.move_img then
+                if board.mt[i][j] ~= 0 then
+                    if (self.white_turn and board.mt[i][j] <= 8) or (not self.white_turn and board.mt[i][j] > 8) then
+                        highlighting.mt[i][j] = nil
+                    else
+                        local enemy_strength = board.mt[i][j]
+                        if self.white_turn then enemy_strength = enemy_strength - 8 end
+                        if self.selection_strength == 1 and enemy_strength == 8 then
+                            highlighting.mt[i][j] = highlighting.attack_img
+                        elseif self.selection_strength == 8 and enemy_strength == 1 then
+                            highlighting.mt[i][j] = nil
+                        elseif self.selection_strength >= enemy_strength then
+                            highlighting.mt[i][j] = highlighting.attack_img
+                        else
+                            highlighting.mt[i][j] = nil
+                        end
+                    end
                 end
             end
         end
@@ -106,12 +144,23 @@ function gamemanager:checkInput()
             board.mt[mt_index.i][mt_index.j] = board.mt[self.selection.i][self.selection.j]
             board.mt[self.selection.i][self.selection.j] = 0
             self.white_turn = not self.white_turn
+        elseif highlighting.mt[mt_index.i][mt_index.j] == highlighting.attack_img then
+            self.state = self.states.hovering
+            self.updateFunction = self.updateHovering
+            board.mt[mt_index.i][mt_index.j] = board.mt[self.selection.i][self.selection.j]
+            board.mt[self.selection.i][self.selection.j] = 0
+            self.white_turn = not self.white_turn
         end
     end
 end
 
 function gamemanager:draw()
     love.graphics.print('Game state: ' .. self.state, 5, 5)
+    if self.white_turn then
+        love.graphics.print("White's turn", 5, 25)
+    else
+        love.graphics.print("Black's turn", 5, 25)
+    end
 end
 
 
