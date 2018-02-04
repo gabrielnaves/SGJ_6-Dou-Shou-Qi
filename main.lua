@@ -24,4 +24,5 @@ function love.draw(dt)
     board_img:draw()
     board:draw()
     highlighting:draw()
+    gamemanager:draw()
 end
