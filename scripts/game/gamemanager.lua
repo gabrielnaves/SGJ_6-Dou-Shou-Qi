@@ -1,14 +1,17 @@
 local gamemanager = {}
 
 gamemanager.white_turn = true
-gamemanager.states = { hovering="hovering", pieceSelected="piece selected" }
+gamemanager.states = { hovering="hovering", pieceSelected="piece selected", gameEnd="game ended" }
 gamemanager.state = nil
 gamemanager.updateFunction = nil
 gamemanager.selection = nil
 gamemanager.selection_strength = nil
+gamemanager.white_won = nil
 
 gamemanager.white_turn_image = still_image.new('white_turn.png', measure.screen_width/2, 20, 0.5, 0)
 gamemanager.black_turn_image = still_image.new('black_turn.png', measure.screen_width/2, 20, 0.5, 0)
+gamemanager.white_win_image = still_image.new('white_win_text.png', measure.screen_width/2, measure.screen_height/2, 0.5, 0.5)
+gamemanager.black_win_image = still_image.new('black_win_text.png', measure.screen_width/2, measure.screen_height/2, 0.5, 0.5)
 
 function gamemanager:init()
     self.state = self.states.hovering
@@ -17,6 +20,9 @@ end
 
 function gamemanager:update()
     self:updateFunction()
+    if self.state ~= self.states.gameEnd then
+        self:checkGameEnd()
+    end
 end
 
 function gamemanager:updateHovering()
@@ -170,11 +176,44 @@ function gamemanager:checkInput()
     end
 end
 
-function gamemanager:draw()
-    if self.white_turn then
-        self.white_turn_image:draw()
+function gamemanager:checkGameEnd()
+    if self.captures.black_amount == 8 then
+        self.white_won = true
+    elseif self.captures.white_amount == 8 then
+        self.white_won = false
+    elseif self.board.mt[4][1] ~= 0 then
+        self.white_won = false
+    elseif self.board.mt[4][9] ~= 0 then
+        self.white_won = true
     else
-        self.black_turn_image:draw()
+        self.white_won = nil
+    end
+    if self.white_won ~= nil then
+        self.state = self.states.gameEnd
+        self.updateFunction = self.updateGameEnd
+    end
+end
+
+function gamemanager:updateGameEnd()
+    -- Restarting conditions are also checked on input module
+    if input.mouseButtonDown then
+        current_scene:restart()
+    end
+end
+
+function gamemanager:draw()
+    if self.state ~= self.states.gameEnd then
+        if self.white_turn then
+            self.white_turn_image:draw()
+        else
+            self.black_turn_image:draw()
+        end
+    else
+        if self.white_won then
+            self.white_win_image:draw()
+        else
+            self.black_win_image:draw()
+        end
     end
 end
 
@@ -182,6 +221,7 @@ function gamemanager:restart()
     self.white_turn = true
     self.state = self.states.hovering
     self.updateFunction = self.updateHovering
+    self.white_won = nil
 end
 
 
