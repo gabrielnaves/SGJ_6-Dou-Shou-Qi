@@ -23,6 +23,7 @@ function love.keypressed(key)
             if current_scene.name == 'menu' then
                 love.event.quit()
             else
+                current_scene:restart()
                 current_scene = require("scripts.scenes.menu_scene")
             end
         end

@@ -7,6 +7,9 @@ gamemanager.updateFunction = nil
 gamemanager.selection = nil
 gamemanager.selection_strength = nil
 
+gamemanager.white_turn_image = still_image.new('white_turn.png', measure.screen_width/2, 20, 0.5, 0)
+gamemanager.black_turn_image = still_image.new('black_turn.png', measure.screen_width/2, 20, 0.5, 0)
+
 function gamemanager:init()
     self.state = self.states.hovering
     self.updateFunction = self.updateHovering
@@ -160,11 +163,10 @@ function gamemanager:checkInput()
 end
 
 function gamemanager:draw()
-    love.graphics.print('Game state: ' .. self.state, 5, 5)
     if self.white_turn then
-        love.graphics.print("White's turn", 5, 25)
+        self.white_turn_image:draw()
     else
-        love.graphics.print("Black's turn", 5, 25)
+        self.black_turn_image:draw()
     end
 end
 
