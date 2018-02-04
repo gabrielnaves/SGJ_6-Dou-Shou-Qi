@@ -37,6 +37,10 @@ function board_floor:init()
     self.mt[4][9] = 'black den'
 end
 
+function board_floor:restart()
+    self:init()
+end
+
 
 board_floor:init()
 return board_floor

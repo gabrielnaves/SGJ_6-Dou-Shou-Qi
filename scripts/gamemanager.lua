@@ -168,6 +168,12 @@ function gamemanager:draw()
     end
 end
 
+function gamemanager:restart()
+    self.white_turn = true
+    self.state = self.states.hovering
+    self.updateFunction = self.updateHovering
+end
+
 
 gamemanager:init()
 return gamemanager

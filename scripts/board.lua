@@ -69,6 +69,10 @@ function board.isPointInBoard(x, y)
            y > measure.board_y+4 and y < measure.board_y+measure.board_height-4
 end
 
+function board:restart()
+    self:init()
+end
+
 
 board:init()
 return board

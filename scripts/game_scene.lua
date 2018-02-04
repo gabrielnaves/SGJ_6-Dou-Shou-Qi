@@ -29,7 +29,9 @@ function game_scene:draw(dt)
 end
 
 function game_scene:restart()
-
+    self.board_floor:restart()
+    self.board:restart()
+    self.gamemanager:restart()
 end
 
 
