@@ -18,7 +18,7 @@ function input:update()
 end
 
 function love.keypressed(key)
-    if key == "escape" then
+    if key == "escape" or key == "q" then
         if current_scene ~= nil then
             if current_scene.name == 'menu' then
                 love.event.quit()
