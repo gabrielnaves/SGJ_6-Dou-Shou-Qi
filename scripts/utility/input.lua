@@ -19,7 +19,13 @@ end
 
 function love.keypressed(key)
     if key == "escape" then
-        love.event.quit()
+        if current_scene ~= nil then
+            if current_scene.name == 'menu' then
+                love.event.quit()
+            else
+                current_scene = require("scripts.scenes.menu_scene")
+            end
+        end
     elseif key == "space" then
         current_scene:restart()
     end

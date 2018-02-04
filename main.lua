@@ -1,5 +1,6 @@
 require("scripts.utility.debug")
 require("scripts.utility.measure")
+require("scripts.utility.geometry")
 require("scripts.utility.still_image")
 require("scripts.utility.input")
 

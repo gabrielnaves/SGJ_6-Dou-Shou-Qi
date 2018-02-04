@@ -1,5 +1,7 @@
 local game_scene = {}
 
+game_scene.name = 'game'
+
 function game_scene:load()
     -- Object loading
     self.board_img = still_image.new('board.png', measure.board_x, measure.board_y)
