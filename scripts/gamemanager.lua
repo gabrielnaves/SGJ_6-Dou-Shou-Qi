@@ -45,21 +45,47 @@ function gamemanager:updateSelected()
 end
 
 function gamemanager:checkMovementDirections()
-    self:checkSquareForMovement(self.selection.i-1, self.selection.j)
-    self:checkSquareForMovement(self.selection.i+1, self.selection.j)
-    self:checkSquareForMovement(self.selection.i, self.selection.j-1)
-    self:checkSquareForMovement(self.selection.i, self.selection.j+1)
+    self:checkSquareForMovement(self.selection.i-1, self.selection.j, 'up')
+    self:checkSquareForMovement(self.selection.i+1, self.selection.j, 'down')
+    self:checkSquareForMovement(self.selection.i, self.selection.j-1, 'left')
+    self:checkSquareForMovement(self.selection.i, self.selection.j+1, 'right')
 end
 
-function gamemanager:checkSquareForMovement(i, j)
+function gamemanager:checkSquareForMovement(i, j, dir)
     if i > 0 and i < measure.square_height+1 and j > 0 and j < measure.square_width+1 then
-        if board.mt[i][j] == 0 then -- No other piece
+        if board.mt[i][j] == 0 then
             if board_floor.mt[i][j] == 'floor' or board_floor.mt[i][j] == 'white trap' or
             board_floor.mt[i][j] == 'black trap' then
                 highlighting.mt[i][j] = highlighting.move_img
             end
-            if self.selection_strength == 1 and board_floor.mt[i][j] == 'water' then
-                highlighting.mt[i][j] = highlighting.move_img
+            if board_floor.mt[i][j] == 'water' then
+                self:checkMovementOnWater(i, j, dir)
+            end
+        end
+    end
+end
+
+function gamemanager:checkMovementOnWater(i, j, dir)
+    if self.selection_strength == 1 then
+        highlighting.mt[i][j] = highlighting.move_img
+    elseif self.selection_strength == 6 or self.selection_strength == 7 then
+        if board.mt[i][j] == 0 then
+            if dir == 'up' then
+                if board.mt[i-2][j] == 0 and board.mt[i-1][j] == 0 then
+                    highlighting.mt[i-2][j] = highlighting.move_img
+                end
+            elseif dir == 'down' then
+                if board.mt[i+2][j] == 0 and board.mt[i+1][j] == 0 then
+                    highlighting.mt[i+2][j] = highlighting.move_img
+                end
+            elseif dir == 'left' then
+                if board.mt[i][j-3] == 0 and board.mt[i][j-2] == 0 and board.mt[i][j-1] == 0 then
+                    highlighting.mt[i][j-3] = highlighting.move_img
+                end
+            elseif dir == 'right' then
+                if board.mt[i][j+3] == 0 and board.mt[i][j+2] == 0 and board.mt[i][j+1] == 0 then
+                    highlighting.mt[i][j+3] = highlighting.move_img
+                end
             end
         end
     end
