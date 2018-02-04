@@ -109,10 +109,15 @@ function gamemanager:checkAttackDirections()
             if highlighting.mt[i][j] == highlighting.move_img then
                 if board.mt[i][j] ~= 0 then
                     if (self.white_turn and board.mt[i][j] <= 8) or (not self.white_turn and board.mt[i][j] > 8) then
-                        highlighting.mt[i][j] = nil
-                    else
+                        highlighting.mt[i][j] = nil -- Animal is ally
+                    else -- Animal is an enemy
+                        -- Calculate enemy strength
                         local enemy_strength = board.mt[i][j]
                         if self.white_turn then enemy_strength = enemy_strength - 8 end
+                        if self.white_turn and board_floor.mt[i][j] == 'white trap' then enemy_strength = 0 end
+                        if not self.white_turn and board_floor.mt[i][j] == 'black trap' then enemy_strength = 0 end
+
+                        -- Check if attack is valid
                         if self.selection_strength == 1 and enemy_strength == 8 then
                             highlighting.mt[i][j] = highlighting.attack_img
                         elseif self.selection_strength == 8 and enemy_strength == 1 then
