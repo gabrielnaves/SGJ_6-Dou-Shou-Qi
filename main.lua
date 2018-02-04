@@ -8,7 +8,7 @@ local background = nil
 function love.load(arg)
     background = still_image.new('background.png')
 
-    current_scene = require("scripts.scenes.game_scene")
+    current_scene = require("scripts.scenes.menu_scene")
 end
 
 function love.update(dt)
