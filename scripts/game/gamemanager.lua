@@ -153,6 +153,14 @@ function gamemanager:checkInput()
             self.board.mt[self.selection.i][self.selection.j] = 0
             self.white_turn = not self.white_turn
         elseif self.highlighting.mt[mt_index.i][mt_index.j] == self.highlighting.attack_img then
+            if self.white_turn then
+                self.captures.black_amount = self.captures.black_amount + 1
+                self.captures.black_captured[self.captures.black_amount] = self.board.mt[mt_index.i][mt_index.j]
+            else
+                self.captures.white_amount = self.captures.white_amount + 1
+                self.captures.white_captured[self.captures.white_amount] = self.board.mt[mt_index.i][mt_index.j]
+            end
+
             self.state = self.states.hovering
             self.updateFunction = self.updateHovering
             self.board.mt[mt_index.i][mt_index.j] = self.board.mt[self.selection.i][self.selection.j]
