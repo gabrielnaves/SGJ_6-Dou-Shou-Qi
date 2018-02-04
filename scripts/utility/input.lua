@@ -21,6 +21,6 @@ function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
     elseif key == "space" then
-        currentScene:restart()
+        current_scene:restart()
     end
 end

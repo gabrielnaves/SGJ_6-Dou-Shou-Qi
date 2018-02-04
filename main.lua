@@ -1,26 +1,26 @@
-require("scripts.debug")
-require("scripts.measure")
-require("scripts.still_image")
-require("scripts.input")
+require("scripts.utility.debug")
+require("scripts.utility.measure")
+require("scripts.utility.still_image")
+require("scripts.utility.input")
 
 local background = nil
 
 function love.load(arg)
     background = still_image.new('background.png')
 
-    currentScene = require("scripts.game_scene")
+    current_scene = require("scripts.scenes.game_scene")
 end
 
 function love.update(dt)
     input:update()
-    if currentScene ~= nil then
-        currentScene:update()
+    if current_scene ~= nil then
+        current_scene:update()
     end
 end
 
 function love.draw(dt)
     background:draw()
-    if currentScene ~= nil then
-        currentScene:draw()
+    if current_scene ~= nil then
+        current_scene:draw()
     end
 end

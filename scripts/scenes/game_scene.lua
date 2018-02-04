@@ -3,11 +3,11 @@ local game_scene = {}
 function game_scene:load()
     -- Object loading
     self.board_img = still_image.new('board.png', measure.board_x, measure.board_y)
-    self.pieces = require("scripts.game_pieces")
-    self.board_floor = require("scripts.board_floor")
-    self.board = require("scripts.board")
-    self.highlighting = require("scripts.highlighting")
-    self.gamemanager = require("scripts.gamemanager")
+    self.pieces = require("scripts.game.game_pieces")
+    self.board_floor = require("scripts.game.board_floor")
+    self.board = require("scripts.game.board")
+    self.highlighting = require("scripts.game.highlighting")
+    self.gamemanager = require("scripts.game.gamemanager")
 
     -- Dependency setup
     self.board.pieces = self.pieces
