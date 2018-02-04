@@ -16,3 +16,11 @@ function input:update()
     self.mouseX = love.mouse.getX()
     self.mouseY = love.mouse.getY()
 end
+
+function love.keypressed(key)
+    if key == "escape" then
+        love.event.quit()
+    elseif key == "space" then
+        currentScene:restart()
+    end
+end

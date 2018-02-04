@@ -9,7 +9,7 @@ function board:init()
         end
     end
 
-    -- white pieces
+    -- white self.pieces
     self.mt[1][1] = 6
     self.mt[1][3] = 8
     self.mt[2][2] = 2
@@ -19,7 +19,7 @@ function board:init()
     self.mt[7][1] = 7
     self.mt[7][3] = 1
 
-    -- black pieces
+    -- black self.pieces
     self.mt[1][7] = 9
     self.mt[1][9] = 15
     self.mt[2][8] = 12
@@ -34,7 +34,7 @@ function board:draw()
     for i=1, measure.square_height do
         for j=1, measure.square_width do
             if self.mt[i][j] ~= 0 then
-                love.graphics.draw(pieces.img, pieces.frames[self.mt[i][j]], self.drawX(j), self.drawY(i))
+                love.graphics.draw(self.pieces.img, self.pieces.frames[self.mt[i][j]], self.drawX(j), self.drawY(i))
             end
         end
     end
